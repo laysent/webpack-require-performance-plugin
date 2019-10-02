@@ -1,0 +1,33 @@
+{
+  "name": "webpack-require-performance-plugin",
+  "version": "0.1.0",
+  "description": "Webpack plugin that mark performance of requiring modules",
+  "main": "index.js",
+  "scripts": {
+  },
+  "keywords": [
+    "webpack",
+    "performance",
+    "modules"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laysent/webpack-require-performance-plugin.git"
+  },
+  "author": {
+    "name": "LaySent",
+    "email": "laysent@hotmail.com",
+    "url": "https://github.com/laysent"
+  },
+  "bugs": {
+    "url": "https://github.com/laysent/webpack-require-performance-plugin/issues"
+  },
+  "homepage": "https://github.com/laysent/webpack-require-performance-plugin#readme",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "peerDependencies": {
+    "webpack": "^1 || ^2 || ^3 || ^4"
+  },
+  "license": "MIT"
+}
