@@ -1,5 +1,6 @@
 const defaultOptions = {
-  disable: false
+  disable: false,
+  clearMeasures: false
 };
 
 function RequirePerformancePlugin(options) {
@@ -7,7 +8,8 @@ function RequirePerformancePlugin(options) {
 }
 
 RequirePerformancePlugin.prototype.apply = function (compiler) {
-  if (this.options.disable) return;
+  const { disable, clearMeasures } = this.options;
+  if (disable) return;
   compiler.plugin('compilation', function (compilation) {
     compilation.mainTemplate.plugin('require', function (source/*, chunk, hash */) {
       const beforeExecuteModule = '// Execute the module function';
@@ -29,7 +31,7 @@ RequirePerformancePlugin.prototype.apply = function (compiler) {
             'if (typeof performance !== "undefined") {',
             '  performance.measure(moduleId, moduleId);',
             '  performance.clearMarks(moduleId);',
-            '  performance.clearMeasures(moduleId);',
+            clearMeasures ? '  performance.clearMeasures(moduleId);' : '',
             '}',
             '',
             afterExecuteModule,

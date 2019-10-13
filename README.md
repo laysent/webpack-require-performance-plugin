@@ -41,3 +41,10 @@ Default: `false`
 If truthy, this plugin does nothing at all.
 
 `{ disable: !process.env.MEASURE }` allows opt-in measurements with `MEASURE=true yarn build`.
+
+### options.clearMeasures
+
+Type: `Boolean`
+Default: `false`
+
+If truthy, this plugin will call `performance.clearMeasures` after `performance.measure`.
