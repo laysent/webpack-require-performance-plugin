@@ -1,6 +1,6 @@
 {
   "name": "webpack-require-performance-plugin",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Webpack plugin that mark performance of requiring modules",
   "main": "index.js",
   "scripts": {
