@@ -3,15 +3,22 @@ const defaultOptions = {
   clearMeasures: false
 };
 
-function RequirePerformancePlugin(options) {
+function WebpackRequirePerformancePlugin(options) {
   this.options = Object.assign(defaultOptions, options);
 }
 
-RequirePerformancePlugin.prototype.apply = function (compiler) {
+WebpackRequirePerformancePlugin.prototype.apply = function (compiler) {
   const { disable, clearMeasures } = this.options;
   if (disable) return;
-  compiler.plugin('compilation', function (compilation) {
-    compilation.mainTemplate.plugin('require', function (source/*, chunk, hash */) {
+  (compiler.hooks ?
+    compiler.hooks.compilation.tap.bind(compiler.hooks.compilation, 'WebpackRequirePerformancePlugin') :
+    compiler.plugin.bind(compiler, 'compilation')
+  )(function (compilation) {
+    const { mainTemplate } = compilation;
+    (mainTemplate.hooks ?
+      mainTemplate.hooks.require.tap.bind(mainTemplate.hooks.require, 'WebpackRequirePerformancePlugin') :
+      mainTemplate.require.bind(mainTemplate, 'require')
+    )(function (source/*, chunk, hash */) {
       const beforeExecuteModule = '// Execute the module function';
       const afterExecuteModule = '// Flag the module as loaded';
       return source
@@ -41,4 +48,4 @@ RequirePerformancePlugin.prototype.apply = function (compiler) {
   });
 };
 
-module.exports = RequirePerformancePlugin;
+module.exports = WebpackRequirePerformancePlugin;
