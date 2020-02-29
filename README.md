@@ -18,7 +18,7 @@ const RequirePerformancePlugin = require('webpack-require-performance-plugin');
 module.exports = (env) => ({
   // ...
   plugins: [
-    new RequirePerformancePlugin({ disable: false }),
+    new RequirePerformancePlugin({ disable: false, project: 'WRPP', prefix: 'plugin' }),
   ],
   optimization: {
     namedModules: true,
@@ -48,3 +48,17 @@ Type: `Boolean`
 Default: `false`
 
 If truthy, this plugin will call `performance.clearMeasures` after `performance.measure`.
+
+### options.project
+
+Type: `String`
+Default: `''`
+
+The `project` string will be used as prefix for performance measure mark. Providing unique ID for each project makes sure that measure mark won't conflict across difference Webpack compiled packages.
+
+### options.prefix
+
+Type: `String`
+Default: Same value as `project` value with suffix `':'`, or `''` if `project` is also empty string
+
+`project` is used for performance mark, while `prefix` is used for label of measured label. `prefix` will be added in front of each module ID, as a way to distinguish.

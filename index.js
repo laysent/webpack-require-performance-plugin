@@ -2,7 +2,9 @@ const webpack = require('webpack');
 
 const defaultOptions = {
   disable: false,
-  clearMeasures: false
+  clearMeasures: false,
+  project: '',
+  prefix: undefined,
 };
 
 function WebpackRequirePerformancePlugin(options) {
@@ -31,7 +33,10 @@ function setRequireHook(compiler, callback) {
 }
 
 WebpackRequirePerformancePlugin.prototype.apply = function (compiler) {
-  const { disable, clearMeasures } = this.options;
+  const { disable, clearMeasures, project, prefix } = this.options;
+  let prefixText = '';
+  if (typeof prefix === 'string') prefixText = prefixText;
+  else if (project !== '') prefixText = `${project}:`;
   if (disable) return;
   setRequireHook(compiler, function (source/*, chunk, hash */) {
     const beforeExecuteModule = '// Execute the module function';
@@ -41,7 +46,8 @@ WebpackRequirePerformancePlugin.prototype.apply = function (compiler) {
         beforeExecuteModule,
         [
           '// Begin mark of performance',
-          'if (typeof performance !== "undefined") performance.mark(moduleId);',
+          `var moduleKey = ${JSON.stringify(project)} + moduleId;`,
+          'if (typeof performance !== "undefined") performance.mark(moduleKey);',
           '',
           beforeExecuteModule,
         ].join('\n'),
@@ -51,9 +57,10 @@ WebpackRequirePerformancePlugin.prototype.apply = function (compiler) {
         [
           '// End mark of performance',
           'if (typeof performance !== "undefined") {',
-          '  performance.measure(moduleId, moduleId);',
-          '  performance.clearMarks(moduleId);',
-          clearMeasures ? '  performance.clearMeasures(moduleId);' : '',
+          `  var moduleLabel = ${JSON.stringify(prefixText)} + moduleId;`,
+          '  performance.measure(moduleLabel, moduleKey);',
+          '  performance.clearMarks(moduleKey);',
+          clearMeasures ? '  performance.clearMeasures(moduleKey);' : '',
           '}',
           '',
           afterExecuteModule,
